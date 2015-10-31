@@ -3,14 +3,17 @@ var db = require('../db');
 module.exports = {
   messages: {
     get: function (cb) {
-      db.con.query('SELECT * from messages order by id DESC limit 100',function(err,data){
+      db.con.query('SELECT m.message, u.username, r.roomname \
+                    FROM messages m \
+                    INNER JOIN users u ON m.userid = u.id \
+                    INNER JOIN rooms r ON m.roomid = r.id',function(err,data){
         if(err){
           return cb(err);
         }
         cb(null, data);
       });
     }, // a function which produces all the messages
-    post: function (obj,cb) { //{roomId:something, etcccc}
+    post: function (obj,cb) { //{roomid:something, etcccc}
       db.con.query('INSERT into messages set ?', obj, function(err,data){
         if(err){
           return cb(err);
@@ -23,7 +26,7 @@ module.exports = {
   users: {
     // Ditto as above.
     get: function (userObj, cb) { //{ username: "Valjean" }
-      db.con.query("SELECT ID, USERNAME FROM users WHERE USERNAME = '" + userObj.username + "'", function(err,rows) {
+      db.con.query("SELECT id, username FROM users WHERE username = '" + userObj.username + "'", function(err,rows) {
         if(err) {
           return cb(err);
         } 
@@ -43,7 +46,7 @@ module.exports = {
   rooms: {
     // Ditto as above.
     get: function (roomObj, cb) { //{ username: "Valjean" }
-      db.con.query("SELECT ID, ROOMNAME FROM rooms WHERE ROOMNAME = '" + roomObj.roomname + "'", function(err,rows) {
+      db.con.query("SELECT id, roomname FROM rooms WHERE roomname = '" + roomObj.roomname + "'", function(err,rows) {
         if(err) {
           return cb(err);
         }

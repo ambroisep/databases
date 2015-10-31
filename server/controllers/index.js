@@ -2,14 +2,19 @@ var models = require('../models');
 
 module.exports = {
   messages: {
-    get: function (req, res) {}, // a function which handles a get request for all messages
+    get: function (req, res) {
+      models.messages.get(function(err,data){
+        if(err) return res.status(500).send(err);
+        return res.status(200).send(data);
+      });
+    }, // a function which handles a get request for all messages
     post: function (req, res) {
       models.users.get({username:req.body.username},function(err,data){
         if(err) return res.status(500).send(err);
-        var userId = data[0].ID;
+        var userId = data[0].id;
         models.rooms.get({roomname:req.body.roomname},function(err,data){
           if(err) return res.status(500).send(err);
-          var roomId = data[0].ID;
+          var roomId = data[0].id;
           models.messages.post({roomid: roomId, userid: userId, message: req.body.message}, function(err, data) {
             if(err) return res.status(500).send(err);
             res.status(201).send([req.body]);
