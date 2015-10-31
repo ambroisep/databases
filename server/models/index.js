@@ -42,6 +42,38 @@ module.exports = {
       });
     }
   },
+  session:{
+
+    get: function (userObj, cb) { //{ username: "Valjean", id: 1}
+      db.con.query("SELECT loginstatus, username FROM users WHERE id = '" + userObj.id + "'", function(err,rows) {
+        if(err) {
+          return cb(err);
+        } 
+        cb(null, rows);
+      });
+    },
+    terminate:function(userObj,cb){
+      db.con.query('UPDATE users set loginstatus = 0 where id = ' + userObj.id, function(err,res) {
+        if(err){
+          return cb(err);
+        } 
+        cb(null,res);
+      });
+    },
+    post: function (userObj, cb) {
+      db.con.query('UPDATE users set loginstatus = 1 where id = ' + userObj.id, function(err,res) {
+        if(err){
+          return cb(err);
+        } 
+        cb(null,res);
+      });
+    }
+
+
+  },
+
+
+
 
   rooms: {
     // Ditto as above.

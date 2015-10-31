@@ -1,18 +1,22 @@
 
+
+
+
+
+
 var app = {
 
   //TODO: The current 'addFriend' function just adds the class 'friend'
   //to all messages sent by the user
   server: 'http://localhost:3000/classes/messages/',
-  username: 'will',
+  // username: 'will',
   roomname: 'Hello',
   lastMessageId: 0,
   friends: {},
 
   init: function() {
     // Get username
-    app.username = window.location.search.substr(10);
-
+    app.userinfo = window.location.search;
     // Cache jQuery selectors
     app.$main = $('#main');
     app.$message = $('#message');
@@ -33,7 +37,26 @@ var app = {
     setInterval(app.fetch, 3000);
   },
 
+  login:function(username,cb){
+    $.ajax({
+      url: "http://localhost:3000/classes/users/",
+      type: 'POST',
+      data: JSON.stringify({username:username}),
+      contentType: 'application/json',
+      success: function (data) {
+        // Trigger a fetch to update the messages, pass true to animate
+        cb(null,data);
+      },
+      error: function (data) {
+        cb(data,null);
+      }
+    });
+  },
+
+
+
   send: function(data) {
+    console.log("Send called and this is DATA",data,window.username)
     app.startSpinner();
     // Clear messages input
     app.$message.val('');
@@ -216,8 +239,9 @@ var app = {
 
   handleSubmit: function(evt) {
     var message = {
-      username: app.username,
-      text: app.$message.val(),
+      username: window.username,
+      password: window.password,
+      message: app.$message.val(),
       roomname: app.roomname || 'lobby'
     };
 

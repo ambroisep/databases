@@ -7,6 +7,7 @@ CREATE TABLE users (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  loginstatus TINYINT(1),
   username VARCHAR(20) NOT NULL,
   password CHAR(32),
 
@@ -40,7 +41,9 @@ CREATE TABLE messages (
 );
 
 insert into users (username,password) values ('will','pwd');
+insert into users (username,password) values ('ambroise','pwd');
 insert into rooms (roomname,creator) values ('Hello',1);
+insert into messages (userid,roomid,message) values (1,1,"THIS BE TEST MESSAGE");
 
 /* Create other tables and define schemas for them here! */
 
