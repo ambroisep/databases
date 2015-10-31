@@ -3,7 +3,7 @@ var db = require('../db');
 module.exports = {
   messages: {
     get: function (cb) {
-      db.con.query('SELECT m.message, u.username, r.roomname \
+      db.con.query('SELECT m.id as objectId, m.message, u.username, r.roomname \
                     FROM messages m \
                     INNER JOIN users u ON m.userid = u.id \
                     INNER JOIN rooms r ON m.roomid = r.id',function(err,data){

@@ -5,7 +5,7 @@ module.exports = {
     get: function (req, res) {
       models.messages.get(function(err,data){
         if(err) return res.status(500).send(err);
-        return res.status(200).send(data);
+        return res.status(200).send({results:data});
       });
     }, // a function which handles a get request for all messages
     post: function (req, res) {
