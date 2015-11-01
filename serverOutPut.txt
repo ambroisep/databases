@@ -1,0 +1,11 @@
+[33m[nodemon] 1.8.0[39m
+[33m[nodemon] to restart at any time, enter `rs`[39m
+[33m[nodemon] watching: *.*[39m
+[32m[nodemon] starting `node server/app.js`[39m
+Listening on 3000
+Connection established
+[0mGET /classes/messages/?order=-createdAt [36m304 [0m10.247 ms - -[0m
+[0mGET /classes/messages/?order=-createdAt [36m304 [0m3.078 ms - -[0m
+[0mGET /classes/messages/?order=-createdAt [36m304 [0m2.843 ms - -[0m
+[0mGET /classes/messages/?order=-createdAt [36m304 [0m2.304 ms - -[0m
+[31m[nodemon] app crashed - waiting for file changes before starting...[39m

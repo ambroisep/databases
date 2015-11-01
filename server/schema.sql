@@ -5,8 +5,8 @@ USE chat;
 
 CREATE TABLE users (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   loginstatus TINYINT(1),
   username VARCHAR(20) NOT NULL,
   password CHAR(32),
@@ -17,8 +17,8 @@ CREATE TABLE users (
 
 CREATE TABLE rooms (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   roomname VARCHAR(20) NOT NULL,
   creator INT NOT NULL,
 
@@ -28,22 +28,22 @@ CREATE TABLE rooms (
 
 CREATE TABLE messages (
   id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  userid INT NOT NULL,
-  roomid INT NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  UserId INT NOT NULL,
+  RoomId INT NOT NULL,
   message varchar(220) NOT NULL,
 
-  FOREIGN KEY (userid)
+  FOREIGN KEY (UserId)
     REFERENCES users(id),
-  FOREIGN KEY (roomid)
+  FOREIGN KEY (RoomId)
     REFERENCES rooms(id)
 );
 
 insert into users (username,password) values ('will','pwd');
 insert into users (username,password) values ('ambroise','pwd');
 insert into rooms (roomname,creator) values ('Hello',1);
-insert into messages (userid,roomid,message) values (1,1,"THIS BE TEST MESSAGE");
+insert into messages (UserId,RoomId,message) values (1,1,"THIS BE TEST MESSAGE");
 
 /* Create other tables and define schemas for them here! */
 

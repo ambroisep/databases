@@ -95,7 +95,7 @@ var app = {
         var displayedRoom = $('.chat span').first().data('roomname');
         app.stopSpinner();
         // Only bother updating the DOM if we have a new message
-        if (mostRecentMessage.objectId !== app.lastMessageId || app.roomname !== displayedRoom) {
+        if (mostRecentMessage.id !== app.lastMessageId || app.roomname !== displayedRoom) {
           // Update the UI with the fetched rooms
           app.populateRooms(data.results);
 
@@ -103,7 +103,7 @@ var app = {
           app.populateMessages(data.results, animate);
 
           // Store the ID of the most recent message
-          app.lastMessageId = mostRecentMessage.objectId;
+          app.lastMessageId = mostRecentMessage.id;
         }
       },
       error: function(data) {
@@ -168,21 +168,21 @@ var app = {
   },
 
   addMessage: function(data) {
-    if (!data.roomname)
-      data.roomname = 'lobby';
+    if (!data.roomname) data.roomname = 'lobby';
+    console.log("IN ADD MESSAGE THIS BE DATA",app.roomname)
 
     // Only add messages that are in our current room
-    if (data.roomname === app.roomname) {
+    if (true) {
       // Create a div to hold the chats
       var $chat = $('<div class="chat"/>');
 
       // Add in the message data using DOM methods to avoid XSS
       // Store the username in the element's data
       var $username = $('<span class="username"/>');
-      $username.text(data.username+': ').attr('data-username', data.username).attr('data-roomname',data.roomname).appendTo($chat);
+      $username.text(data.User.username+': ').attr('data-username', data.User.username).attr('data-roomname',data.roomname).appendTo($chat);
 
       // Add the friend class
-      if (app.friends[data.username] === true)
+      if (app.friends[data.User.username] === true)
         $username.addClass('friend');
 
       var $message = $('<br><span/>');

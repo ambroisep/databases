@@ -1,25 +1,104 @@
-var db = require('../db');
+/* You'll need to
+ * npm install sequelize
+ * before running this example. Documentation is at http://sequelizejs.com/
+ */
+
+var Sequelize = require("sequelize");
+var sequelize = new Sequelize("chat", "root", "pwd");
+/* TODO this constructor takes the database name, username, then password.
+ * Modify the arguments if you need to */
+
+/* first define the data structure by giving property names and datatypes
+ * See http://sequelizejs.com for other datatypes you can use besides STRING. */
+var User = sequelize.define('User', {
+  username: Sequelize.STRING,
+  password: Sequelize.STRING
+});
+
+var Message = sequelize.define('Message', {
+  message: Sequelize.STRING,
+});
+
+var Room = sequelize.define('Room', {
+  roomname:Sequelize.STRING
+});
+
+// User.hasMany(Message);
+User.hasMany(Room,{as:"creator"});
+Message.belongsTo(User);
+
+Room.hasMany(Message,{as:"room"})
+Message.belongsTo(Room)
+// Room.belongsTo(User, {as:"Creator"});
+
+
+// Room.belongsTo(User,{foreignKey:"CreatorId", allowNull: false,as:"creator"})
+
+// Message.belongsTo(Rooms)
+
+
+/* .sync() makes Sequelize create the database table for us if it doesn't
+ *  exist already: */
+
+
+User.sync().then(function(e) {
+  // /* This callback function is called once sync succeeds. */
+
+  // // now instantiate an object and save it:
+  // var newUser = Users.build({username: "Jean Valjean",password:"poo"});
+  // newUser.save().then(function() {
+
+  //   /* This callback function is called once saving succeeds. */
+
+  //   // Retrieve objects from the database:
+  //   Users.findAll({ where: {username: "Jean Valjean"} }).then(function(usrs) {
+  //     // This function is called back with an array of matches.
+  //     for (var i = 0; i < usrs.length; i++) {
+  //       console.log(usrs[i].username + " exists");
+  //     }
+  //   }); 
+  // });
+  console.log("Successfully created users ... ")
+User.create({username: "Jean Valjean",password:"poo"}).then(function(e){console.log("Successfully created user")}).catch(function(e){console.log("ERROR CREATING SEED USER",e)})
+}).catch(function(e){
+  console.log("You fucked up in USERS",e);
+});
+
+Message.sync().then(function(e){
+  console.log("successfully created messages ...")
+Message.create({UserId: 1,message:"THIS ISS A TEST",roomid:1}).then(function(e){console.log("Successfully MESSAGE")}).catch(function(e){console.log("ERROR CREATING SEED MESSAGE",e)})
+}).catch(function(e){
+  console.log("You fucked up in MESSSAGES",e)
+})
+
+Room.sync().then(function(e){
+  console.log("successfully created rooms ...")
+Room.create({creator: 1,roomname:"TestRoom"}).then(function(e){console.log("Successfully ROOM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")}).catch(function(e){console.log("ERROR CREATING SEED ROOM",e)})
+}).catch(function(e){
+  console.log("Problem making room",e)
+})
+
+
+
+
+
+// var db = require('../db');
 
 module.exports = {
   messages: {
     get: function (cb) {
-      db.con.query('SELECT m.id as objectId, m.message, u.username, r.roomname \
-                    FROM messages m \
-                    INNER JOIN users u ON m.userid = u.id \
-                    INNER JOIN rooms r ON m.roomid = r.id',function(err,data){
-        if(err){
-          return cb(err);
-        }
-        cb(null, data);
-      });
+      Message.findAll( { include:[User] }).then(function(e){
+        cb(null,e);
+      }).catch(function(e){
+        cb(e,null)
+      })
     }, // a function which produces all the messages
     post: function (obj,cb) { //{roomid:something, etcccc}
-      db.con.query('INSERT into messages set ?', obj, function(err,data){
-        if(err){
-          return cb(err);
-        }
-        cb(null, data);
-      });
+      Message.create(obj).then(function(e){
+        cb(null,e);
+      }).catch(function(e){
+        cb(e,null)
+      })
     } // a function which can be used to insert a message into the database
   },
 
